@@ -23,5 +23,5 @@ export function isGoodDay(day, limits) {
 
 export function summarize(days, limits) {
     const good = days.filter((day) => isGoodDay(day, limits));
-    return `good for run on ${good.length} of ${days.length} days`;
+    return `good for a run on ${good.length} of ${days.length} days`;
 }
