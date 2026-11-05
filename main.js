@@ -47,6 +47,17 @@ form.addEventListener("submit", async (event) => {
   render();
 })
 
+rainInput.addEventListener("input", () => {
+  state.limits.rain = Number(rainInput.value);
+  render();
+});
+
+windInput.addEventListener("input", () => {
+  state.limits.wind = Number(windInput.value);
+  render();
+});
+
+
 const state = {
   city: null,
   days: [],
