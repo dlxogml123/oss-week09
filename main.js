@@ -9,6 +9,8 @@
 // 커밋 메시지: p1: submit / p2: fetch / p3: rows / p4: rule / p5: live / p7: reasons
 //
 // 받아 오는 일은 api.js, 판단하는 규칙은 logic.js 에 둡니다. 이 파일에는 화면을 읽고 그리는 코드만.
+import { getForecast } from "./api.js";
+import { toDays } from "./logic.js";
 
 // 주어짐: 도시 세 곳의 위도·경도. 키는 index.html <select> 의 option value 와 같습니다.
 const CITIES = {
@@ -32,7 +34,6 @@ form.addEventListener("submit", (event) => {
   statusEl.textContent = "Loading...";
 });
 
-import { getForecast } from "./api.js";
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const city = CITIES[citySelect.value];
@@ -40,12 +41,28 @@ form.addEventListener("submit", async (event) => {
   statusEl.classList.remove("error");
   try {
     const daily = await getForecast(city);
-    console.log(daily);
-    statusEl.textContent =
-    ``;
+    state.city = city;
+    state.days = toDays(daily);
+    statusEl.textContent = "";
   } catch (err) {
     statusEl.textContent =
     `Could not load the forecast (${err.message}).`;
     statusEl.classList.add("error");
   }
+  render();
 })
+
+const state = { city: null, days: []};
+  function dayRow(day) {
+    const tr = document.createElement("tr");
+    for (const text of [day.date.slice(5), `${day.max}°`, `${day.wind}°`, `${day.rain}%`]) {
+    const td = document.createElement("td");
+    td.textContent = text;
+    tr.append(td);
+  }
+  return tr;
+}
+
+function render() {
+  rowsEl.replaceChildren(...state.days.map(dayRow));
+}
