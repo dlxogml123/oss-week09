@@ -10,7 +10,7 @@
 //
 // 받아 오는 일은 api.js, 판단하는 규칙은 logic.js 에 둡니다. 이 파일에는 화면을 읽고 그리는 코드만.
 import { getForecast } from "./api.js";
-import { toDays, isGoodDay, summarize } from "./logic.js";
+import { toDays, isGoodDay, summarize, reasons } from "./logic.js";
 
 // 주어짐: 도시 세 곳의 위도·경도. 키는 index.html <select> 의 option value 와 같습니다.
 const CITIES = {
@@ -65,7 +65,7 @@ const state = {
 };
 function dayRow(day) {
     const tr = document.createElement("tr");
-    for (const text of [day.date.slice(5), `${day.max}°`, `${day.wind} km/h`, `${day.rain}%`]) {
+    for (const text of [day.date.slice(5), `${day.max}°`, `${day.wind} km/h`, `${day.rain}%`, reasons(day, state.limits).join(", ")]) {
     const td = document.createElement("td");
     td.textContent = text;
     tr.append(td);
