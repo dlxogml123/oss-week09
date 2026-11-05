@@ -30,5 +30,22 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   const city = CITIES[citySelect.value];
   statusEl.textContent = "Loading...";
-  console.log(city);
 });
+
+import { getForecast } from "./api.js";
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const city = CITIES[citySelect.value];
+  statusEl.textContent = "Loading...";
+  statusEl.classList.remove("error");
+  try {
+    const daily = await getForecast(city);
+    console.log(daily);
+    statusEl.textContent =
+    ``;
+  } catch (err) {
+    statusEl.textContent =
+    `Could not load the forecast (${err.message}).`;
+    statusEl.classList.add("error");
+  }
+})
